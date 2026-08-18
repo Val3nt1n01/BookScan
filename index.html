@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Préstamos - Biblioteca</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --success-color: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+
+            background-color: #1e293b;
+
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
+                              url('fondo.jpg');
+
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid #e2e8f0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header-icon {
+            background-color: #eff6ff;
+            color: var(--primary-color);
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.99);
+        }
+
+        button:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        
+        .toast {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .toast.success {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .toast.error {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">📚</div>
+            <h1>Registro de Préstamo</h1>
+            <p>Escanea el libro e ingresa los datos del lector</p>
+        </div>
+
+        <form id="form-prestamo">
+            <div class="form-group">
+                <label for="codigo">Código de Barras</label>
+                <input type="text" id="codigo" name="codigo" placeholder="Haz clic aquí y escanea..." required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="libro">Título del Libro</label>
+                <input type="text" id="libro" name="libro" placeholder="Ej. Cien años de soledad" required>
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo del Lector</label>
+                <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha Límite de Devolución</label>
+                <input type="date" id="fecha" name="fecha" required>
+            </div>
+
+            <button type="submit" id="btn-enviar">Registrar Préstamo</button>
+        </form>
+
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script>
+        
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz7g4sFB1bxicHD66N8-FM1-T_Kp-iAyHhc7Max4ld37c2A-lf-KQUD8sw1V5oG94y2/exec";
+
+        const formulario = document.getElementById('form-prestamo');
+        const btnEnviar = document.getElementById('btn-enviar');
+        const inputCodigo = document.getElementById('codigo');
+        const inputLibro = document.getElementById('libro');
+        const inputCorreo = document.getElementById('correo');
+        const inputFecha = document.getElementById('fecha');
+        const toast = document.getElementById('toast');
+
+        
+        const hoy = new Date();
+        hoy.setDate(hoy.getDate() + 7);
+        inputFecha.value = hoy.toISOString().split('T')[0];
+
+        // Busca el titulo automaticamente
+        function buscarLibro() {
+            const codigo = inputCodigo.value.trim();
+            if (!codigo) return;
+
+            inputLibro.placeholder = "🔍 Buscando en inventario...";
+            inputLibro.value = "";
+
+            fetch(`${URL_SCRIPT}?accion=buscarLibro&codigo=${encodeURIComponent(codigo)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.encontrado) {
+                        inputLibro.value = data.titulo;
+                        inputCorreo.focus(); // Pasa el cursor automáticamente al correo
+                    } else {
+                        inputLibro.placeholder = "⚠️ Libro no encontrado (escríbelo a mano)";
+                        inputLibro.focus();
+                    }
+                })
+                .catch(err => {
+                    console.error("Error al buscar el libro:", err);
+                    inputLibro.placeholder = "Ej. Cien años de soledad";
+                });
+        }
+
+        
+        inputCodigo.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarLibro();
+            }
+        });
+
+        
+        inputCodigo.addEventListener('change', buscarLibro);
+
+        
+        function mostrarToast(mensaje, esExito) {
+            toast.innerText = mensaje;
+            toast.className = `toast ${esExito ? 'success' : 'error'}`;
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 4000);
+        }
+
+        
+        formulario.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            btnEnviar.innerText = "Guardando...";
+            btnEnviar.disabled = true;
+
+            const datosForm = new FormData();
+            datosForm.append('codigo', inputCodigo.value.trim());
+            datosForm.append('libro', inputLibro.value.trim());
+            datosForm.append('correo', inputCorreo.value.trim());
+            datosForm.append('fecha', inputFecha.value);
+
+            fetch(URL_SCRIPT, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: datosForm
+            })
+            .then(() => {
+                mostrarToast("✅ ¡Préstamo guardado con éxito!", true);
+                
+                // Guardar la fecha actual antes de limpiar para no perderla
+                const fechaSeleccionada = inputFecha.value;
+                formulario.reset();
+                inputFecha.value = fechaSeleccionada;
+
+                // Devolver el cursor al código para el siguiente libro
+                inputCodigo.focus();
+            })
+            .catch(error => {
+                mostrarToast("❌ Ocurrió un error al guardar. Revisa tu conexión.", false);
+                console.error(error);
+            })
+            .finally(() => {
+                btnEnviar.innerText = "Registrar Préstamo";
+                btnEnviar.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
