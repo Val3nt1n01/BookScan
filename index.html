@@ -1,315 +1,445 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Préstamos - Biblioteca</title>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --border-color: #cbd5e1;
-            --success-color: #16a34a;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Préstamos - Biblioteca</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger-color: #dc2626;
+      --danger-hover: #b91c1c;
+      --text-color: #1e293b;
+      --card-bg: #ffffff;
+      --border-color: #cbd5e1;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
 
-        body {
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+    body {
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      background-color: #1e293b;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+                        url('https://i.postimg.cc/vHLVQjRN/fondo.jpg');
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
 
-            background-color: #1e293b;
+    .main-wrapper {
+      display: flex;
+      gap: 24px;
+      width: 100%;
+      max-width: 960px;
+      align-items: flex-start;
+      justify-content: center;
+    }
 
-            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
-                              url('fondo.jpg');
+    @media (max-width: 820px) {
+      .main-wrapper {
+        flex-direction: column-reverse;
+        align-items: center;
+      }
+    }
 
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
+    /* Panel Izquierdo */
+    .panel-lista {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 440px;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid #e2e8f0;
+    }
 
-        .container {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 480px;
-            padding: 32px;
-            border-radius: 16px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid #e2e8f0;
-        }
+    .panel-lista h2 {
+      font-size: 1.3rem;
+      color: #0f172a;
+      margin-bottom: 18px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
+    .lista-contenedor {
+      max-height: 420px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 4px;
+    }
 
-        .header-icon {
-            background-color: #eff6ff;
-            color: var(--primary-color);
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin-bottom: 12px;
-        }
+    .estado-lista {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+      padding: 20px 0;
+    }
 
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            color: #0f172a;
-        }
+    .item-prestamo {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid var(--primary-color);
+      padding: 12px 14px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-        .header p {
-            font-size: 14px;
-            color: #64748b;
-            margin-top: 4px;
-        }
+    .item-prestamo .titulo {
+      font-weight: 600;
+      color: #0f172a;
+      font-size: 0.95rem;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .item-prestamo .meta {
+      font-size: 0.82rem;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+    }
 
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #334155;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    .btn-devolver {
+      margin-top: 4px;
+      padding: 6px 12px;
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-end;
+      width: auto;
+      transition: background-color 0.2s;
+    }
 
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 15px;
-            color: var(--text-color);
-            transition: all 0.2s ease;
-            outline: none;
-        }
+    .btn-devolver:hover {
+      background-color: var(--danger-hover);
+    }
 
-        input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
+    /* Panel Derecho */
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 460px;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid #e2e8f0;
+    }
 
-        input::placeholder {
-            color: #94a3b8;
-        }
+    .container h1 {
+      margin-bottom: 6px;
+      color: #0f172a;
+      font-size: 1.6rem;
+      text-align: center;
+    }
 
-        button {
-            width: 100%;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            margin-top: 8px;
-        }
+    .container p.subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+    }
 
-        button:hover {
-            background-color: var(--primary-hover);
-        }
+    .form-group {
+      margin-bottom: 18px;
+    }
 
-        button:active {
-            transform: scale(0.99);
-        }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #334155;
+    }
 
-        button:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-        }
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      color: var(--text-color);
+    }
 
-        
-        .toast {
-            display: none;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            margin-top: 16px;
-            animation: fadeIn 0.3s ease;
-        }
+    input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
 
-        .toast.success {
-            background-color: #dcfce7;
-            color: #15803d;
-            border: 1px solid #bbf7d0;
-        }
+    input::placeholder {
+      color: #94a3b8 !important;
+      -webkit-text-fill-color: #94a3b8 !important;
+      font-weight: 400;
+      opacity: 1;
+    }
 
-        .toast.error {
-            background-color: #fee2e2;
-            color: #b91c1c;
-            border: 1px solid #fecaca;
-        }
+    input[readonly] {
+      background-color: #f8fafc;
+      opacity: 1;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    button.btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px;
+    }
+
+    button.btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button:disabled {
+      background-color: #94a3b8 !important;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      display: none;
+    }
+
+    .status-msg.success {
+      display: block;
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .status-msg.error {
+      display: block;
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .status-msg.info {
+      display: block;
+      background-color: #e0f2fe;
+      color: #075985;
+      border: 1px solid #bae6fd;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <div class="header-icon">📚</div>
-            <h1>Registro de Préstamo</h1>
-            <p>Escanea el libro e ingresa los datos del lector</p>
-        </div>
-
-        <form id="form-prestamo">
-            <div class="form-group">
-                <label for="codigo">Código de Barras</label>
-                <input type="text" id="codigo" name="codigo" placeholder="Haz clic aquí y escanea..." required autofocus>
-            </div>
-
-            <div class="form-group">
-                <label for="libro">Título del Libro</label>
-                <input type="text" id="libro" name="libro" placeholder="Ej. Cien años de soledad" required>
-            </div>
-
-            <div class="form-group">
-                <label for="correo">Correo del Lector</label>
-                <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
-            </div>
-
-            <div class="form-group">
-                <label for="fecha">Fecha Límite de Devolución</label>
-                <input type="date" id="fecha" name="fecha" required>
-            </div>
-
-            <button type="submit" id="btn-enviar">Registrar Préstamo</button>
-        </form>
-
-        <div id="toast" class="toast"></div>
+  <div class="main-wrapper">
+    <div class="panel-lista">
+      <h2>📖 Libros Prestados</h2>
+      <div id="contenedorLista" class="lista-contenedor">
+        <p class="estado-lista">Cargando lista de préstamos...</p>
+      </div>
     </div>
 
-    <script>
-        
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz7g4sFB1bxicHD66N8-FM1-T_Kp-iAyHhc7Max4ld37c2A-lf-KQUD8sw1V5oG94y2/exec";
+    <div class="container">
+      <h1>📚 Registro de Préstamos</h1>
+      <p class="subtitle">Gestión de Biblioteca</p>
 
-        const formulario = document.getElementById('form-prestamo');
-        const btnEnviar = document.getElementById('btn-enviar');
-        const inputCodigo = document.getElementById('codigo');
-        const inputLibro = document.getElementById('libro');
-        const inputCorreo = document.getElementById('correo');
-        const inputFecha = document.getElementById('fecha');
-        const toast = document.getElementById('toast');
+      <form id="formPrestamo">
+        <div class="form-group">
+          <label for="codigo">Código del Libro</label>
+          <input type="text" id="codigo" name="codigo" placeholder="Ingresa o escanea el código" required autocomplete="off">
+        </div>
 
-        
-        const hoy = new Date();
-        hoy.setDate(hoy.getDate() + 7);
-        inputFecha.value = hoy.toISOString().split('T')[0];
+        <div class="form-group">
+          <label for="libro">Título del Libro</label>
+          <input type="text" id="libro" name="libro" placeholder="Se completará automáticamente" required readonly>
+        </div>
 
-        // Busca el titulo automaticamente
-        function buscarLibro() {
-            const codigo = inputCodigo.value.trim();
-            if (!codigo) return;
+        <div class="form-group">
+          <label for="correo">Correo del Solicitante</label>
+          <input type="email" id="correo" name="correo" placeholder="correo@ejemplo.com" required>
+        </div>
 
-            inputLibro.placeholder = "🔍 Buscando en inventario...";
-            inputLibro.value = "";
+        <div class="form-group">
+          <label for="fecha">Fecha de Devolución</label>
+          <input type="date" id="fecha" name="fecha" required>
+        </div>
 
-            fetch(`${URL_SCRIPT}?accion=buscarLibro&codigo=${encodeURIComponent(codigo)}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.encontrado) {
-                        inputLibro.value = data.titulo;
-                        inputCorreo.focus(); // Pasa el cursor automáticamente al correo
-                    } else {
-                        inputLibro.placeholder = "⚠️ Libro no encontrado (escríbelo a mano)";
-                        inputLibro.focus();
-                    }
-                })
-                .catch(err => {
-                    console.error("Error al buscar el libro:", err);
-                    inputLibro.placeholder = "Ej. Cien años de soledad";
-                });
-        }
+        <button type="submit" id="btnSubmit" class="btn-submit">Registrar Préstamo</button>
+      </form>
 
-        
-        inputCodigo.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                buscarLibro();
-            }
-        });
+      <div id="mensaje" class="status-msg"></div>
+    </div>
+  </div>
 
-        
-        inputCodigo.addEventListener('change', buscarLibro);
+  <script>
+    const inputCodigo = document.getElementById('codigo');
+    const inputLibro = document.getElementById('libro');
+    const form = document.getElementById('formPrestamo');
+    const mensaje = document.getElementById('mensaje');
+    const btnSubmit = document.getElementById('btnSubmit');
 
-        
-        function mostrarToast(mensaje, esExito) {
-            toast.innerText = mensaje;
-            toast.className = `toast ${esExito ? 'success' : 'error'}`;
-            toast.style.display = 'block';
+    window.addEventListener('DOMContentLoaded', cargarListaPrestamos);
 
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 4000);
-        }
+    inputCodigo.addEventListener('blur', buscarLibro);
+    inputCodigo.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        buscarLibro();
+      }
+    });
 
-        
-        formulario.addEventListener('submit', function(e) {
-            e.preventDefault();
+    function cargarListaPrestamos() {
+      const contenedor = document.getElementById('contenedorLista');
 
-            btnEnviar.innerText = "Guardando...";
-            btnEnviar.disabled = true;
+      google.script.run
+        .withSuccessHandler(function(prestamos) {
+          if (!prestamos || prestamos.length === 0) {
+            contenedor.innerHTML = '<p class="estado-lista">No hay préstamos activos registrados.</p>';
+            return;
+          }
 
-            const datosForm = new FormData();
-            datosForm.append('codigo', inputCodigo.value.trim());
-            datosForm.append('libro', inputLibro.value.trim());
-            datosForm.append('correo', inputCorreo.value.trim());
-            datosForm.append('fecha', inputFecha.value);
+          contenedor.innerHTML = '';
+          prestamos.forEach(function(item) {
+            const div = document.createElement('div');
+            div.className = 'item-prestamo';
+            div.innerHTML = `
+              <div class="titulo">${item.libro || 'Sin título'}</div>
+              <div class="meta">
+                <span><strong>Cód:</strong> ${item.codigo}</span>
+                <span><strong>Devolver:</strong> ${item.fecha || '-'}</span>
+              </div>
+              <div class="meta">
+                <span>📧 ${item.correo}</span>
+              </div>
+              <button class="btn-devolver" onclick="devolverLibro(${item.fila}, this)">↩️ Devolver</button>
+            `;
+            contenedor.appendChild(div);
+          });
+        })
+        .withFailureHandler(function() {
+          contenedor.innerHTML = '<p class="estado-lista" style="color:#991b1b;">Error al cargar préstamos.</p>';
+        })
+        .obtenerPrestamosEnServer();
+    }
 
-            fetch(URL_SCRIPT, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: datosForm
-            })
-            .then(() => {
-                mostrarToast("✅ ¡Préstamo guardado con éxito!", true);
-                
-                // Guardar la fecha actual antes de limpiar para no perderla
-                const fechaSeleccionada = inputFecha.value;
-                formulario.reset();
-                inputFecha.value = fechaSeleccionada;
+    function devolverLibro(fila, boton) {
+      if (!confirm('¿Confirmas que este libro ha sido devuelto?')) return;
 
-                // Devolver el cursor al código para el siguiente libro
-                inputCodigo.focus();
-            })
-            .catch(error => {
-                mostrarToast("❌ Ocurrió un error al guardar. Revisa tu conexión.", false);
-                console.error(error);
-            })
-            .finally(() => {
-                btnEnviar.innerText = "Registrar Préstamo";
-                btnEnviar.disabled = false;
-            });
-        });
-    </script>
+      boton.disabled = true;
+      boton.textContent = 'Procesando...';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res === 'Éxito') {
+            mostrarMensaje('✅ Libro devuelto y registrado correctamente.', 'success');
+            cargarListaPrestamos();
+          } else {
+            boton.disabled = false;
+            boton.textContent = '↩️ Devolver';
+            mostrarMensaje('Error al procesar devolución: ' + res, 'error');
+          }
+        })
+        .withFailureHandler(function(err) {
+          boton.disabled = false;
+          boton.textContent = '↩️ Devolver';
+          mostrarMensaje('Error de conexión: ' + err.message, 'error');
+        })
+        .devolverLibroEnServer(fila);
+    }
+
+    function buscarLibro() {
+      const codigoVal = inputCodigo.value.trim();
+      if (!codigoVal) return;
+
+      mostrarMensaje('Buscando libro en inventario...', 'info');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.encontrado) {
+            inputLibro.value = res.titulo;
+            ocultarMensaje();
+          } else {
+            inputLibro.value = '';
+            mostrarMensaje('❌ Libro no encontrado en el inventario.', 'error');
+          }
+        })
+        .withFailureHandler(function(err) {
+          mostrarMensaje('Error en servidor: ' + err.message, 'error');
+        })
+        .buscarLibroEnServer(codigoVal);
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (!inputLibro.value) {
+        mostrarMensaje('Por favor, ingresa un código de libro válido.', 'error');
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      mostrarMensaje('Guardando préstamo...', 'info');
+
+      const datosForm = {
+        codigo: document.getElementById('codigo').value,
+        libro: document.getElementById('libro').value,
+        correo: document.getElementById('correo').value,
+        fecha: document.getElementById('fecha').value
+      };
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btnSubmit.disabled = false;
+          if (res.includes('Éxito')) {
+            mostrarMensaje('✅ Préstamo registrado con éxito.', 'success');
+            form.reset();
+            cargarListaPrestamos();
+          } else {
+            mostrarMensaje('Error al registrar: ' + res, 'error');
+          }
+        })
+        .withFailureHandler(function(err) {
+          btnSubmit.disabled = false;
+          mostrarMensaje('Error de conexión: ' + err.message, 'error');
+        })
+        .registrarPrestamoEnServer(datosForm);
+    });
+
+    function mostrarMensaje(texto, tipo) {
+      mensaje.textContent = texto;
+      mensaje.className = 'status-msg ' + tipo;
+    }
+
+    function ocultarMensaje() {
+      mensaje.style.display = 'none';
+      mensaje.className = 'status-msg';
+    }
+  </script>
+
 </body>
 </html>
